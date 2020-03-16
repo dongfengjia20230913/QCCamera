@@ -3,7 +3,6 @@ package com.jdf.camera.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,13 +10,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.afei.gpuimagedemo.util.FileUtils;
 import com.jdf.camera.R;
-import com.jdf.camera.activity.BaseActivity;
 import com.jdf.camera.util.GPUImageFilterTools;
 
-import jp.co.cyberagent.android.gpuimage.GPUImageView;
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter;
+import com.jdf.gpufilter.GPUImageView;
+import com.jdf.gpufilter.fiters.GPUImageFilter;
 
 public class GalleryActivity extends BaseActivity implements View.OnClickListener {
 

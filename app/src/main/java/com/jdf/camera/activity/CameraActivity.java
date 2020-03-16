@@ -2,14 +2,14 @@ package com.jdf.camera.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.view.ViewCompat;
 
 import com.afei.gpuimagedemo.util.FileUtils;
 import com.jdf.camera.R;
@@ -18,9 +18,9 @@ import com.jdf.camera.camera.CameraLoader;
 import com.jdf.camera.util.ApplicationUtil;
 import com.jdf.camera.util.GPUImageFilterTools;
 
-import jp.co.cyberagent.android.gpuimage.GPUImageView;
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter;
-import jp.co.cyberagent.android.gpuimage.util.Rotation;
+import com.jdf.gpufilter.GPUImageView;
+import com.jdf.gpufilter.fiters.GPUImageFilter;
+import com.jdf.gpufilter.util.Rotation;
 
 public class CameraActivity extends BaseActivity implements View.OnClickListener {
 
@@ -33,9 +33,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private GPUImageFilterTools.FilterAdjuster mFilterAdjuster;
 
     private CameraLoader mCameraLoader;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         initView();
@@ -93,6 +92,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
                                            int oldRight, int oldBottom) {
                     mGPUImageView.removeOnLayoutChangeListener(this);
+                    android.util.Log.d("jiadongfeng",mGPUImageView.getWidth()+"x"+mGPUImageView.getHeight());
                     mCameraLoader.onResume(mGPUImageView.getWidth(), mGPUImageView.getHeight());
                 }
             });

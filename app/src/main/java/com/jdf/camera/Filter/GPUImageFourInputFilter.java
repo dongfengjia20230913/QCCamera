@@ -7,10 +7,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter;
-import jp.co.cyberagent.android.gpuimage.util.OpenGlUtils;
-import jp.co.cyberagent.android.gpuimage.util.Rotation;
-import jp.co.cyberagent.android.gpuimage.util.TextureRotationUtil;
+import com.jdf.gpufilter.fiters.GPUImageFilter;
+import com.jdf.gpufilter.util.OpenGlUtils;
+import com.jdf.gpufilter.util.Rotation;
+import com.jdf.gpufilter.util.TextureRotationUtil;
 
 public class GPUImageFourInputFilter extends GPUImageFilter {
     private static final String VERTEX_SHADER = "attribute vec4 position;\n" +

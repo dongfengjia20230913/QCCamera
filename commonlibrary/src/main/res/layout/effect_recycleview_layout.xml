@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/effect_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="invisible">
+
+    <SeekBar
+        android:id="@+id/tone_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/image_recyclerView"
+        android:layout_gravity="bottom"
+        android:background="#55ffffff"
+        android:max="100"
+        android:padding="10dp"
+        android:visibility="gone" />
+
+    <com.jdf.common.widget.ImageRecyclerView
+        android:id="@+id/image_recyclerView"
+        android:layout_width="fill_parent"
+        android:layout_height="84dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/camera_bar_background"
+        android:clipToPadding="false"
+        android:overScrollMode="never" />
+
+    <RelativeLayout
+        android:layout_width="@dimen/effect_list_item_mask_image_size"
+        android:layout_height="@dimen/effect_list_layout_heght"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/effect_name"
+            android:layout_width="55dp"
+            android:layout_height="@dimen/effect_list_filter_name_layout_height"
+            android:layout_above="@+id/effect_list_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/effect_list_item_margintotext_size"
+            android:background="@drawable/effect_select_name_bg"
+            android:gravity="center"
+            android:text="effect"
+            android:textColor="#CC000000"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/effect_list_image"
+            android:layout_width="@dimen/effect_list_item_mask_image_size"
+            android:layout_height="@dimen/effect_list_item_mask_image_size"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/effect_item_cover" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

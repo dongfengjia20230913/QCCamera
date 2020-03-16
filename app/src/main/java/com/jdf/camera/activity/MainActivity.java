@@ -1,18 +1,19 @@
 package com.jdf.camera.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.jdf.camera.R;
+import com.jdf.camera.util.GPUImageFilterTools;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -39,9 +40,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private boolean checkPermission() {
         for (int i = 0; i < PERMISSIONS.length; i++) {
-            int state = ContextCompat.checkSelfPermission(this, PERMISSIONS[i]);
+            int state = checkSelfPermission(PERMISSIONS[i]);
             if (state != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSION);
+                requestPermissions( PERMISSIONS, REQUEST_PERMISSION);
                 return false;
             }
         }
@@ -66,7 +67,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_PERMISSION) {
-            //checkPermission();
+//            checkPermission();
         }
     }
 
@@ -75,6 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.main_camera_btn:
                 startActivity(new Intent(this, CameraActivity.class));
+//                GPUImageFilterTools.showDialog(this,null);
                 break;
             case R.id.main_gallery_btn:
                 startActivity(new Intent(this, GalleryActivity.class));

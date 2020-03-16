@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+
+        versionCode = VERSION_CODE as int
+        versionName = VERSION_NAME
+        ndk.abiFilters 'armeabi-v7a'
+        externalNativeBuild {
+            cmake { cppFlags "" }
+        }
+    }
+    externalNativeBuild {
+        cmake { path "src/main/cpp/CMakeLists.txt" }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+ext {
+
+    bintrayName = 'gpufiler'
+    bintrayUserOrg = 'jdf'
+    publishedGroupId = 'com.jdf.gpufiter'
+    libraryName = 'gpufiler'
+    artifact = 'gpufiler'
+    libraryDescription = 'Image filters for Android with OpenGL (based on GPUImage for iOS)'
+    siteUrl = 'https://github.com/jdf-eng/QCCamera'
+    gitUrl = 'https://github.com/jdf-eng/QCCamera.git'
+    issueUrl = 'https://github.com/jdf-eng/QCCamera/issues'
+    libraryVersion = VERSION_NAME
+    developerId = 'cats'
+    developerName = 'CATS'
+    developerEmail = '987293233@qq.com'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+
+dependencies {
+}

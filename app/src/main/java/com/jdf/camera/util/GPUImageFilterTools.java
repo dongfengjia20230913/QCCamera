@@ -1,23 +1,105 @@
 package com.jdf.camera.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.opengl.Matrix;
+import android.view.View;
 
-import com.afei.gpuimagedemo.Filter.GPUMultiImageAddBlendFilter;
+import com.jdf.camera.Filter.GPUMultiImageAddBlendFilter;
 import com.jdf.camera.Filter.JGPUImageAddBlendFilter;
 import com.jdf.camera.R;
-
-import jp.co.cyberagent.android.gpuimage.filter.*;
+import com.jdf.camera.ui.RecycleViewDialog;
+import com.jdf.common.widget.recycleview.FilterList;
+import com.jdf.common.widget.recycleview.FilterType;
+import com.jdf.gpufilter.fiters.GPUImage3x3ConvolutionFilter;
+import com.jdf.gpufilter.fiters.GPUImage3x3TextureSamplingFilter;
+import com.jdf.gpufilter.fiters.GPUImageAddBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageAlphaBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageBilateralBlurFilter;
+import com.jdf.gpufilter.fiters.GPUImageBoxBlurFilter;
+import com.jdf.gpufilter.fiters.GPUImageBrightnessFilter;
+import com.jdf.gpufilter.fiters.GPUImageBulgeDistortionFilter;
+import com.jdf.gpufilter.fiters.GPUImageCGAColorspaceFilter;
+import com.jdf.gpufilter.fiters.GPUImageChromaKeyBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageColorBalanceFilter;
+import com.jdf.gpufilter.fiters.GPUImageColorBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageColorBurnBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageColorDodgeBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageColorInvertFilter;
+import com.jdf.gpufilter.fiters.GPUImageContrastFilter;
+import com.jdf.gpufilter.fiters.GPUImageCrosshatchFilter;
+import com.jdf.gpufilter.fiters.GPUImageDarkenBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageDifferenceBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageDilationFilter;
+import com.jdf.gpufilter.fiters.GPUImageDirectionalSobelEdgeDetectionFilter;
+import com.jdf.gpufilter.fiters.GPUImageDissolveBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageDivideBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageEmbossFilter;
+import com.jdf.gpufilter.fiters.GPUImageExclusionBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageExposureFilter;
+import com.jdf.gpufilter.fiters.GPUImageFalseColorFilter;
+import com.jdf.gpufilter.fiters.GPUImageFilter;
+import com.jdf.gpufilter.fiters.GPUImageFilterGroup;
+import com.jdf.gpufilter.fiters.GPUImageGammaFilter;
+import com.jdf.gpufilter.fiters.GPUImageGaussianBlurFilter;
+import com.jdf.gpufilter.fiters.GPUImageGlassSphereFilter;
+import com.jdf.gpufilter.fiters.GPUImageGrayscaleFilter;
+import com.jdf.gpufilter.fiters.GPUImageHalftoneFilter;
+import com.jdf.gpufilter.fiters.GPUImageHardLightBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageHazeFilter;
+import com.jdf.gpufilter.fiters.GPUImageHighlightShadowFilter;
+import com.jdf.gpufilter.fiters.GPUImageHueBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageHueFilter;
+import com.jdf.gpufilter.fiters.GPUImageKuwaharaFilter;
+import com.jdf.gpufilter.fiters.GPUImageLaplacianFilter;
+import com.jdf.gpufilter.fiters.GPUImageLevelsFilter;
+import com.jdf.gpufilter.fiters.GPUImageLightenBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageLinearBurnBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageLookupFilter;
+import com.jdf.gpufilter.fiters.GPUImageLuminosityBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageMonochromeFilter;
+import com.jdf.gpufilter.fiters.GPUImageMultiplyBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageNonMaximumSuppressionFilter;
+import com.jdf.gpufilter.fiters.GPUImageNormalBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageOpacityFilter;
+import com.jdf.gpufilter.fiters.GPUImageOverlayBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImagePixelationFilter;
+import com.jdf.gpufilter.fiters.GPUImagePosterizeFilter;
+import com.jdf.gpufilter.fiters.GPUImageRGBDilationFilter;
+import com.jdf.gpufilter.fiters.GPUImageRGBFilter;
+import com.jdf.gpufilter.fiters.GPUImageSaturationBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageSaturationFilter;
+import com.jdf.gpufilter.fiters.GPUImageScreenBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageSepiaToneFilter;
+import com.jdf.gpufilter.fiters.GPUImageSharpenFilter;
+import com.jdf.gpufilter.fiters.GPUImageSketchFilter;
+import com.jdf.gpufilter.fiters.GPUImageSmoothToonFilter;
+import com.jdf.gpufilter.fiters.GPUImageSoftLightBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageSourceOverBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageSphereRefractionFilter;
+import com.jdf.gpufilter.fiters.GPUImageSubtractBlendFilter;
+import com.jdf.gpufilter.fiters.GPUImageSwirlFilter;
+import com.jdf.gpufilter.fiters.GPUImageThresholdEdgeDetectionFilter;
+import com.jdf.gpufilter.fiters.GPUImageToneCurveFilter;
+import com.jdf.gpufilter.fiters.GPUImageToonFilter;
+import com.jdf.gpufilter.fiters.GPUImageTransformFilter;
+import com.jdf.gpufilter.fiters.GPUImageTwoInputFilter;
+import com.jdf.gpufilter.fiters.GPUImageVignetteFilter;
+import com.jdf.gpufilter.fiters.GPUImageWeakPixelInclusionFilter;
+import com.jdf.gpufilter.fiters.GPUImageWhiteBalanceFilter;
+import com.qiku.android.app.QKAlertDialog;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.jdf.common.widget.recycleview.FilterType.*;
+
 public class GPUImageFilterTools {
-    public static void showDialog(final Context context,
+    public static void showDialog(final Activity context,
                                   final OnGpuImageFilterChosenListener listener) {
         final FilterList filters = new FilterList();
         filters.addFilter(context.getString(R.string.contrast), FilterType.CONTRAST);
@@ -34,64 +116,64 @@ public class GPUImageFilterTools {
         filters.addFilter(context.getString(R.string.emboss), FilterType.EMBOSS);
         filters.addFilter(context.getString(R.string.posterize), FilterType.POSTERIZE);
         filters.addFilter(context.getString(R.string.grouped_filters), FilterType.FILTER_GROUP);
-        filters.addFilter(context.getString(R.string.saturation), FilterType.SATURATION);
-        filters.addFilter(context.getString(R.string.exposure), FilterType.EXPOSURE);
-        filters.addFilter(context.getString(R.string.highlight_shadow), FilterType.HIGHLIGHT_SHADOW);
-        filters.addFilter(context.getString(R.string.monochrome), FilterType.MONOCHROME);
-        filters.addFilter(context.getString(R.string.opacity), FilterType.OPACITY);
-        filters.addFilter(context.getString(R.string.rgb), FilterType.RGB);
-        filters.addFilter(context.getString(R.string.white_balance), FilterType.WHITE_BALANCE);
-        filters.addFilter(context.getString(R.string.vignette), FilterType.VIGNETTE);
-        filters.addFilter(context.getString(R.string.tone_curve), FilterType.TONE_CURVE);
+//        filters.addFilter(context.getString(R.string.saturation), FilterType.SATURATION);
+//        filters.addFilter(context.getString(R.string.exposure), FilterType.EXPOSURE);
+//        filters.addFilter(context.getString(R.string.highlight_shadow), FilterType.HIGHLIGHT_SHADOW);
+//        filters.addFilter(context.getString(R.string.monochrome), FilterType.MONOCHROME);
+//        filters.addFilter(context.getString(R.string.opacity), FilterType.OPACITY);
+//        filters.addFilter(context.getString(R.string.rgb), FilterType.RGB);
+//        filters.addFilter(context.getString(R.string.white_balance), FilterType.WHITE_BALANCE);
+//        filters.addFilter(context.getString(R.string.vignette), FilterType.VIGNETTE);
+//        filters.addFilter(context.getString(R.string.tone_curve), FilterType.TONE_CURVE);
 
-        filters.addFilter(context.getString(R.string.blend_difference), FilterType.BLEND_DIFFERENCE);
-        filters.addFilter(context.getString(R.string.blend_source_over), FilterType.BLEND_SOURCE_OVER);
-        filters.addFilter(context.getString(R.string.blend_color_burn), FilterType.BLEND_COLOR_BURN);
-        filters.addFilter(context.getString(R.string.blend_color_dodge), FilterType.BLEND_COLOR_DODGE);
-        filters.addFilter(context.getString(R.string.blend_darken), FilterType.BLEND_DARKEN);
-        filters.addFilter(context.getString(R.string.blend_dissolve), FilterType.BLEND_DISSOLVE);
-        filters.addFilter(context.getString(R.string.blend_exclusion), FilterType.BLEND_EXCLUSION);
-        filters.addFilter(context.getString(R.string.blend_hard_light), FilterType.BLEND_HARD_LIGHT);
-        filters.addFilter(context.getString(R.string.blend_lighten), FilterType.BLEND_LIGHTEN);
-        filters.addFilter(context.getString(R.string.blend_add), FilterType.BLEND_ADD);
-        filters.addFilter(context.getString(R.string.blend_divide), FilterType.BLEND_DIVIDE);
-        filters.addFilter(context.getString(R.string.blend_multiply), FilterType.BLEND_MULTIPLY);
-        filters.addFilter(context.getString(R.string.blend_overlay), FilterType.BLEND_OVERLAY);
-        filters.addFilter(context.getString(R.string.blend_screen), FilterType.BLEND_SCREEN);
-        filters.addFilter(context.getString(R.string.blend_alpha), FilterType.BLEND_ALPHA);
-        filters.addFilter(context.getString(R.string.blend_color), FilterType.BLEND_COLOR);
-        filters.addFilter(context.getString(R.string.blend_hue), FilterType.BLEND_HUE);
-        filters.addFilter(context.getString(R.string.blend_saturation), FilterType.BLEND_SATURATION);
-        filters.addFilter(context.getString(R.string.blend_luminosity), FilterType.BLEND_LUMINOSITY);
-        filters.addFilter(context.getString(R.string.blend_linear_burn), FilterType.BLEND_LINEAR_BURN);
-        filters.addFilter(context.getString(R.string.blend_soft_light), FilterType.BLEND_SOFT_LIGHT);
-        filters.addFilter(context.getString(R.string.blend_subtract), FilterType.BLEND_SUBTRACT);
-        filters.addFilter(context.getString(R.string.blend_chroma_key), FilterType.BLEND_CHROMA_KEY);
-        filters.addFilter(context.getString(R.string.blend_normal), FilterType.BLEND_NORMAL);
+//        filters.addFilter(context.getString(R.string.blend_difference), FilterType.BLEND_DIFFERENCE);
+//        filters.addFilter(context.getString(R.string.blend_source_over), FilterType.BLEND_SOURCE_OVER);
+//        filters.addFilter(context.getString(R.string.blend_color_burn), FilterType.BLEND_COLOR_BURN);
+//        filters.addFilter(context.getString(R.string.blend_color_dodge), FilterType.BLEND_COLOR_DODGE);
+//        filters.addFilter(context.getString(R.string.blend_darken), FilterType.BLEND_DARKEN);
+//        filters.addFilter(context.getString(R.string.blend_dissolve), FilterType.BLEND_DISSOLVE);
+//        filters.addFilter(context.getString(R.string.blend_exclusion), FilterType.BLEND_EXCLUSION);
+//        filters.addFilter(context.getString(R.string.blend_hard_light), FilterType.BLEND_HARD_LIGHT);
+//        filters.addFilter(context.getString(R.string.blend_lighten), FilterType.BLEND_LIGHTEN);
+//        filters.addFilter(context.getString(R.string.blend_add), FilterType.BLEND_ADD);
+//        filters.addFilter(context.getString(R.string.blend_divide), FilterType.BLEND_DIVIDE);
+//        filters.addFilter(context.getString(R.string.blend_multiply), FilterType.BLEND_MULTIPLY);
+//        filters.addFilter(context.getString(R.string.blend_overlay), FilterType.BLEND_OVERLAY);
+//        filters.addFilter(context.getString(R.string.blend_screen), FilterType.BLEND_SCREEN);
+//        filters.addFilter(context.getString(R.string.blend_alpha), FilterType.BLEND_ALPHA);
+//        filters.addFilter(context.getString(R.string.blend_color), FilterType.BLEND_COLOR);
+//        filters.addFilter(context.getString(R.string.blend_hue), FilterType.BLEND_HUE);
+//        filters.addFilter(context.getString(R.string.blend_saturation), FilterType.BLEND_SATURATION);
+//        filters.addFilter(context.getString(R.string.blend_luminosity), FilterType.BLEND_LUMINOSITY);
+//        filters.addFilter(context.getString(R.string.blend_linear_burn), FilterType.BLEND_LINEAR_BURN);
+//        filters.addFilter(context.getString(R.string.blend_soft_light), FilterType.BLEND_SOFT_LIGHT);
+//        filters.addFilter(context.getString(R.string.blend_subtract), FilterType.BLEND_SUBTRACT);
+//        filters.addFilter(context.getString(R.string.blend_chroma_key), FilterType.BLEND_CHROMA_KEY);
+//        filters.addFilter(context.getString(R.string.blend_normal), FilterType.BLEND_NORMAL);
 
-        filters.addFilter(context.getString(R.string.lookup_amatorka), FilterType.LOOKUP_AMATORKA);
-        filters.addFilter(context.getString(R.string.gaussian_blur), FilterType.GAUSSIAN_BLUR);
-        filters.addFilter(context.getString(R.string.crosshatch), FilterType.CROSSHATCH);
-
-        filters.addFilter(context.getString(R.string.box_blur), FilterType.BOX_BLUR);
-        filters.addFilter(context.getString(R.string.cga_color_space), FilterType.CGA_COLORSPACE);
-        filters.addFilter(context.getString(R.string.dilation), FilterType.DILATION);
-        filters.addFilter(context.getString(R.string.kuwahara), FilterType.KUWAHARA);
-        filters.addFilter(context.getString(R.string.rgb_dilation), FilterType.RGB_DILATION);
-        filters.addFilter(context.getString(R.string.sketch), FilterType.SKETCH);
-        filters.addFilter(context.getString(R.string.toon), FilterType.TOON);
-        filters.addFilter(context.getString(R.string.smooth_toon), FilterType.SMOOTH_TOON);
-        filters.addFilter(context.getString(R.string.halftone), FilterType.HALFTONE);
-
-        filters.addFilter(context.getString(R.string.bulge_distortion), FilterType.BULGE_DISTORTION);
-        filters.addFilter(context.getString(R.string.glass_sphere), FilterType.GLASS_SPHERE);
-        filters.addFilter(context.getString(R.string.haze), FilterType.HAZE);
-        filters.addFilter(context.getString(R.string.laplacian), FilterType.LAPLACIAN);
-        filters.addFilter(context.getString(R.string.non_maximum_suppression), FilterType.NON_MAXIMUM_SUPPRESSION);
-        filters.addFilter(context.getString(R.string.sphere_refraction), FilterType.SPHERE_REFRACTION);
-        filters.addFilter(context.getString(R.string.swirl), FilterType.SWIRL);
-        filters.addFilter(context.getString(R.string.weak_pixel_inclusion), FilterType.WEAK_PIXEL_INCLUSION);
-        filters.addFilter(context.getString(R.string.false_color), FilterType.FALSE_COLOR);
+//        filters.addFilter(context.getString(R.string.lookup_amatorka), FilterType.LOOKUP_AMATORKA);
+//        filters.addFilter(context.getString(R.string.gaussian_blur), FilterType.GAUSSIAN_BLUR);
+//        filters.addFilter(context.getString(R.string.crosshatch), FilterType.CROSSHATCH);
+//
+//        filters.addFilter(context.getString(R.string.box_blur), FilterType.BOX_BLUR);
+//        filters.addFilter(context.getString(R.string.cga_color_space), FilterType.CGA_COLORSPACE);
+//        filters.addFilter(context.getString(R.string.dilation), FilterType.DILATION);
+//        filters.addFilter(context.getString(R.string.kuwahara), FilterType.KUWAHARA);
+//        filters.addFilter(context.getString(R.string.rgb_dilation), FilterType.RGB_DILATION);
+//        filters.addFilter(context.getString(R.string.sketch), FilterType.SKETCH);
+//        filters.addFilter(context.getString(R.string.toon), FilterType.TOON);
+//        filters.addFilter(context.getString(R.string.smooth_toon), FilterType.SMOOTH_TOON);
+//        filters.addFilter(context.getString(R.string.halftone), FilterType.HALFTONE);
+//
+//        filters.addFilter(context.getString(R.string.bulge_distortion), FilterType.BULGE_DISTORTION);
+//        filters.addFilter(context.getString(R.string.glass_sphere), FilterType.GLASS_SPHERE);
+//        filters.addFilter(context.getString(R.string.haze), FilterType.HAZE);
+//        filters.addFilter(context.getString(R.string.laplacian), FilterType.LAPLACIAN);
+//        filters.addFilter(context.getString(R.string.non_maximum_suppression), FilterType.NON_MAXIMUM_SUPPRESSION);
+//        filters.addFilter(context.getString(R.string.sphere_refraction), FilterType.SPHERE_REFRACTION);
+//        filters.addFilter(context.getString(R.string.swirl), FilterType.SWIRL);
+//        filters.addFilter(context.getString(R.string.weak_pixel_inclusion), FilterType.WEAK_PIXEL_INCLUSION);
+//        filters.addFilter(context.getString(R.string.false_color), FilterType.FALSE_COLOR);
 
         filters.addFilter(context.getString(R.string.color_balance), FilterType.COLOR_BALANCE);
 
@@ -101,21 +183,12 @@ public class GPUImageFilterTools {
 
         filters.addFilter(context.getString(R.string.transform_2d), FilterType.TRANSFORM2D);
 
+        new RecycleViewDialog().showDialog(context,filters,listener);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.choose_filter));
-        builder.setItems(filters.names.toArray(new String[filters.names.size()]),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int item) {
-                        listener.onGpuImageFilterChosenListener(
-                                createFilterForType(context, filters.filters.get(item)), filters.names.get(item));
-                    }
-                });
-        builder.create().show();
+
     }
 
-    private static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
+    public static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
 //        return createBlendFilter1(context, GPUMultiImageAddBlendFilter.class);
 
         switch (type) {
@@ -336,24 +409,9 @@ public class GPUImageFilterTools {
         void onGpuImageFilterChosenListener(GPUImageFilter filter, String filterName);
     }
 
-    private enum FilterType {
-        CONTRAST, GRAYSCALE, SHARPEN, SEPIA, SOBEL_EDGE_DETECTION, THREE_X_THREE_CONVOLUTION, FILTER_GROUP, EMBOSS, POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION,
-        SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME, OPACITY, RGB, WHITE_BALANCE, VIGNETTE, TONE_CURVE, BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,
-        BLEND_DISSOLVE, BLEND_EXCLUSION, BLEND_SOURCE_OVER, BLEND_HARD_LIGHT, BLEND_LIGHTEN, BLEND_ADD, BLEND_DIVIDE, BLEND_MULTIPLY, BLEND_OVERLAY, BLEND_SCREEN, BLEND_ALPHA,
-        BLEND_COLOR, BLEND_HUE, BLEND_SATURATION, BLEND_LUMINOSITY, BLEND_LINEAR_BURN, BLEND_SOFT_LIGHT, BLEND_SUBTRACT, BLEND_CHROMA_KEY, BLEND_NORMAL, LOOKUP_AMATORKA,
-        GAUSSIAN_BLUR, CROSSHATCH, BOX_BLUR, CGA_COLORSPACE, DILATION, KUWAHARA, RGB_DILATION, SKETCH, TOON, SMOOTH_TOON, BULGE_DISTORTION, GLASS_SPHERE, HAZE, LAPLACIAN, NON_MAXIMUM_SUPPRESSION,
-        SPHERE_REFRACTION, SWIRL, WEAK_PIXEL_INCLUSION, FALSE_COLOR, COLOR_BALANCE, LEVELS_FILTER_MIN, BILATERAL_BLUR, HALFTONE, TRANSFORM2D
-    }
 
-    private static class FilterList {
-        public List<String> names = new LinkedList<String>();
-        public List<FilterType> filters = new LinkedList<FilterType>();
 
-        public void addFilter(final String name, final FilterType filter) {
-            names.add(name);
-            filters.add(filter);
-        }
-    }
+
 
     public static class FilterAdjuster {
         private final Adjuster<? extends GPUImageFilter> adjuster;

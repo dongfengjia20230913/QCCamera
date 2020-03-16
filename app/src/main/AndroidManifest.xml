@@ -11,7 +11,7 @@
         android:name=".applicaiton.CameraApplication"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppStartTheme1">
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait">

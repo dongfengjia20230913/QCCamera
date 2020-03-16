@@ -7,7 +7,7 @@
     <string name="main_permission_hint">请打开相关权限</string>
 
     <!-- Common-->
-    <string name="choose_filter">选择滤镜</string>
+    <string name="choose_filter">选择滤镜1</string>
 
     <!-- Filter-->
     <string name="contrast">对比度</string>

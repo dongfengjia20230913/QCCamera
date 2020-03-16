@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--effect list dimens-->
+    <dimen name="effect_list_item_image_size">48dp</dimen>
+
+    <dimen name="effect_list_item_mask_image_size">50dp</dimen>
+    <dimen name="effect_list_filter_name_layout_height">24dp</dimen>
+    <dimen name="effect_list_item_margintotext_size">10dp</dimen>
+    <!-- 以上三个值相加 -->
+    <dimen name="effect_list_layout_heght">84dp</dimen>
+
+</resources>

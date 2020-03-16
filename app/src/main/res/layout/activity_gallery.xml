@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <jp.co.cyberagent.android.gpuimage.GPUImageView
+        <com.jdf.gpufilter.GPUImageView
             android:id="@+id/gpuimage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

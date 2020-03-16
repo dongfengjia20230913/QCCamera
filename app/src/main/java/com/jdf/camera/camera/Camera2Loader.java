@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.ImageFormat;
+import android.graphics.Point;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -13,12 +14,14 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 
+import androidx.annotation.NonNull;
+
 import com.jdf.camera.util.ImageUtils;
+import com.jdf.common.utils.ScreenUtil;
 
 import java.util.Arrays;
 
@@ -47,8 +50,8 @@ public class Camera2Loader extends CameraLoader {
 
     @Override
     public void onResume(int width, int height) {
-        mViewWidth = width;
-        mViewHeight = height;
+        mViewWidth =width;
+        mViewHeight =height;
         setUpCamera();
     }
 

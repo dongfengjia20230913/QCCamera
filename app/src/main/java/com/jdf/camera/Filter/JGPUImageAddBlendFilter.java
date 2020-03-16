@@ -5,7 +5,7 @@ package com.jdf.camera.Filter;
 import com.jdf.camera.applicaiton.CameraApplication;
 import com.jdf.camera.util.ShaderUtil;
 
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageTwoInputFilter;
+import com.jdf.gpufilter.fiters.GPUImageTwoInputFilter;
 
 public class JGPUImageAddBlendFilter extends GPUImageTwoInputFilter {
 

@@ -1,0 +1,14 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:useLevel="false">
+    <solid android:color="#ffffff" />
+
+    <size
+        android:width="55dp"
+        android:height="@dimen/effect_list_filter_name_layout_height" />
+    <!--<corners android:radius="4dp" />-->
+
+    <corners
+        android:radius="4dp"
+        />
+</shape>
