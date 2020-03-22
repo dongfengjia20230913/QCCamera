@@ -15,6 +15,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    aaptOptions {
+        noCompress "tflite"
+    }
 }
 
 dependencies {
@@ -26,6 +30,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "android.arch.lifecycle:extensions:1.1.1"
-
+    implementation project(path: ':tf_library')
 
 }

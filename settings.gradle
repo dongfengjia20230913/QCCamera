@@ -1,1 +1,1 @@
-include ':app', ':gpufilter', ':commonlibrary', ':commonwidget'
+include ':app', ':gpufilter', ':commonlibrary', ':commonwidget', ':tf_library'

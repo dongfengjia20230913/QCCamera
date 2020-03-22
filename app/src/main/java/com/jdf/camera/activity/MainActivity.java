@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.jdf.camera.R;
 import com.jdf.camera.util.GPUImageFilterTools;
+import com.jdf.common.utils.JLog;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 

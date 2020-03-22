@@ -272,6 +272,7 @@ public class GPUImageRenderer implements GLSurfaceView.Renderer, GLTextureView.R
     }
 
     private void adjustImageScaling() {
+        //返回的surface大小，也就是glsurfaceview的大小
         float outputWidth = this.outputWidth;
         float outputHeight = this.outputHeight;
         if (rotation == Rotation.ROTATION_270 || rotation == Rotation.ROTATION_90) {
@@ -279,16 +280,24 @@ public class GPUImageRenderer implements GLSurfaceView.Renderer, GLTextureView.R
             outputHeight = this.outputWidth;
         }
 
+        //根据view的大小和实际要显示的图片大小，获取调整比例
         float ratio1 = outputWidth / imageWidth;
         float ratio2 = outputHeight / imageHeight;
         float ratioMax = Math.max(ratio1, ratio2);
+
+        //获取实际要显示的图片大小
         int imageWidthNew = Math.round(imageWidth * ratioMax);
         int imageHeightNew = Math.round(imageHeight * ratioMax);
 
+        //计算要显示的view调整的比例
         float ratioWidth = imageWidthNew / outputWidth;
         float ratioHeight = imageHeightNew / outputHeight;
 
         float[] cube = CUBE;
+        /**
+         * 根据旋转角度，重新获取纹理坐标和顶点坐标
+         */
+
         float[] textureCords = TextureRotationUtil.getRotation(rotation, flipHorizontal, flipVertical);
         if (scaleType == GPUImage.ScaleType.CENTER_CROP) {
             float distHorizontal = (1 - 1 / ratioWidth) / 2;

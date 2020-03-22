@@ -83,4 +83,6 @@
             android:padding="5dp"
             android:src="@mipmap/ic_ok" />
     </RelativeLayout>
+
+    <include layout="@layout/tf_object_dection_tracking"/>
 </com.jdf.common.widget.recycleview.EffectRelativeLayout>
