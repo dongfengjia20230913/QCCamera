@@ -45,6 +45,6 @@ GlSurfaceView继承自SurfaceView类，专门用来显示OpenGL渲染的，简�
 
 **因此，后续我们相机的相关实现都是技术GlSurfaceView来处理的**
 
-## OPENGL ES 版本选择##
+## OPENGL ES 版本选择 ##
 
 反编译了市场上几家大的第三方app，都是使用OPENGL ES 2.0版本，因此，我们使用2.0版本。
