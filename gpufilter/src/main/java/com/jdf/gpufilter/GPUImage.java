@@ -45,7 +45,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+import com.jdf.common.utils.JLog;
+import com.jdf.gpufilter.fiters.GPUImage3x3ConvolutionFilter;
 import com.jdf.gpufilter.fiters.GPUImageFilter;
+import com.jdf.gpufilter.fiters.GPUImageGrayscaleFilter;
 import com.jdf.gpufilter.util.Rotation;
 
 /**
@@ -147,6 +150,7 @@ public class GPUImage {
     public void requestRender() {
         if (surfaceType == SURFACE_TYPE_SURFACE_VIEW) {
             if (glSurfaceView != null) {
+                JLog.d("jiadongfeng4","  glSurfaceView.requestRender");
                 glSurfaceView.requestRender();
             }
         } else if (surfaceType == SURFACE_TYPE_TEXTURE_VIEW) {

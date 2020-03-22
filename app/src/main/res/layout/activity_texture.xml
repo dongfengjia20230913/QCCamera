@@ -18,12 +18,23 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="show other picture" />
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/switch_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Switch Filter" />
+
+    <Button
+        android:id="@+id/switch_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/switch_filter"
+        android:layout_centerInParent="true"
+        android:text="Switch Image" />
 
 
 </RelativeLayout>

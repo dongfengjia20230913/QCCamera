@@ -18,34 +18,23 @@ package com.jdf.gpufilter;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
-import android.hardware.Camera.PreviewCallback;
-import android.hardware.Camera.Size;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.jdf.gpufilter.GLTextureView;
-import com.jdf.gpufilter.GPUImage;
-import com.jdf.gpufilter.GPUImageNativeLibrary;
-import com.jdf.gpufilter.fiters.GPUImageFilter;
+import com.jdf.common.utils.JLog;
 import com.jdf.gpufilter.fiters.JGPUImageFilter;
 import com.jdf.gpufilter.util.OpenGlUtils;
 import com.jdf.gpufilter.util.Rotation;
 import com.jdf.gpufilter.util.TextureRotationUtil;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import static com.jdf.gpufilter.util.TextureRotationUtil.TEXTURE_NO_ROTATION;
 
 public class JGPUImageRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "GPUImageRenderer";
@@ -56,7 +45,6 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
 
     private final FloatBuffer glCubeBuffer;
     private final FloatBuffer glTextureBuffer;
-    private JGPUImageFilter filter;
 
     private int outputWidth;
     private int outputHeight;
@@ -73,6 +61,8 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
     private int imageHeight;
 
     private int addedPadding;
+
+    private JGPUImageFilter filter;
 
 
     private GPUImage.ScaleType scaleType = GPUImage.ScaleType.CENTER_CROP;
@@ -137,6 +127,7 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(final GL10 gl) {
+        JLog.d("jiadongfeng4","onDraw.....");
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //调用队列任务
         runAll(runOnDraw);
@@ -221,6 +212,7 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
             @Override
             public void run() {
                 Bitmap resizedBitmap = null;
+                //求余数，OPENGL处理的图片大小必须是2的整数次方
                 if (bitmap.getWidth() % 2 == 1) {
                     resizedBitmap = Bitmap.createBitmap(bitmap.getWidth() + 1, bitmap.getHeight(),
                             Bitmap.Config.ARGB_8888);
@@ -243,6 +235,25 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
             }
         });
     }
+
+    public void setFilter(final JGPUImageFilter filter) {
+        runOnDraw(new Runnable() {
+
+            @Override
+            public void run() {
+                final JGPUImageFilter oldFilter = JGPUImageRenderer.this.filter;
+                JGPUImageRenderer.this.filter = filter;
+                if (oldFilter != null) {
+                    oldFilter.destroy();//destory
+                }
+                JGPUImageRenderer.this.filter.ifNeedInit();
+                GLES20.glUseProgram(JGPUImageRenderer.this.filter.getProgram());
+                JGPUImageRenderer.this.filter.onOutputSizeChanged(outputWidth, outputHeight);
+            }
+        });
+    }
+
+
 
     protected void runOnDraw(final Runnable runnable) {
         synchronized (runOnDraw) {

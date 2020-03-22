@@ -21,6 +21,8 @@ import android.content.res.AssetManager;
 import android.graphics.PointF;
 import android.opengl.GLES20;
 
+import com.jdf.common.utils.JLog;
+import com.jdf.gpufilter.GPUImageRenderer;
 import com.jdf.gpufilter.util.OpenGlUtils;
 
 import java.io.InputStream;
@@ -76,6 +78,8 @@ public class GPUImageFilter {
     }
 
     public void onInit() {
+        JLog.d("jiadongfeng4",this+" onInit....");
+
         glProgId = OpenGlUtils.loadProgram(vertexShader, fragmentShader);
         glAttribPosition = GLES20.glGetAttribLocation(glProgId, "position");
         glUniformTexture = GLES20.glGetUniformLocation(glProgId, "inputImageTexture");
@@ -106,6 +110,8 @@ public class GPUImageFilter {
 
     public void onDraw(final int textureId, final FloatBuffer cubeBuffer,
                        final FloatBuffer textureBuffer) {
+        JLog.d("jiadongfeng4",this+" start onDraw....");
+
         GLES20.glUseProgram(glProgId);
         runPendingOnDrawTasks();
         if (!isInitialized) {
@@ -129,6 +135,8 @@ public class GPUImageFilter {
         GLES20.glDisableVertexAttribArray(glAttribPosition);
         GLES20.glDisableVertexAttribArray(glAttribTextureCoordinate);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        JLog.d("jiadongfeng4",this+" start end....");
+
     }
 
     protected void onDrawArraysPre() {

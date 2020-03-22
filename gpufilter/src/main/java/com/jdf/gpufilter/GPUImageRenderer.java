@@ -36,6 +36,7 @@ import java.util.Queue;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.jdf.common.utils.JLog;
 import com.jdf.gpufilter.fiters.GPUImageFilter;
 import com.jdf.gpufilter.util.OpenGlUtils;
 import com.jdf.gpufilter.util.Rotation;
@@ -202,6 +203,7 @@ public class GPUImageRenderer implements GLSurfaceView.Renderer, GLTextureView.R
                 if (oldFilter != null) {
                     oldFilter.destroy();
                 }
+                JLog.d("jiadongfeng4","oldfilter:"+oldFilter+" newFilter:"+GPUImageRenderer.this.filter);
                 GPUImageRenderer.this.filter.ifNeedInit();
                 GLES20.glUseProgram(GPUImageRenderer.this.filter.getProgram());
                 GPUImageRenderer.this.filter.onOutputSizeChanged(outputWidth, outputHeight);
