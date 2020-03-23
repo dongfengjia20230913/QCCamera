@@ -153,7 +153,6 @@ public class GPUImageRenderer implements GLSurfaceView.Renderer, GLTextureView.R
         final Size previewSize = camera.getParameters().getPreviewSize();
         onPreviewFrame(data, previewSize.width, previewSize.height);
     }
-
     public void onPreviewFrame(final byte[] data, final int width, final int height) {
         if (glRgbBuffer == null) {
             glRgbBuffer = IntBuffer.allocate(width * height);

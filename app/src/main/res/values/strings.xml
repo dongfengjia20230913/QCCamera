@@ -82,4 +82,5 @@
     <string name="levels_min_mid_adjust">Levels Min (Mid Adjust)</string>
     <string name="bilateral_blur">Bilateral Blur</string>
     <string name="transform_2d">Transform (2-D)</string>
+    <string name="title_activity_camera2">Camera2Activity</string>
 </resources>

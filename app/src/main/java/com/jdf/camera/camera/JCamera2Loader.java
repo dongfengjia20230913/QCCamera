@@ -13,20 +13,22 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 
 import androidx.annotation.NonNull;
 
-//import com.jdf.camera.controller.DetectController;
 import com.jdf.camera.controller.DetectController;
 import com.jdf.camera.util.ImageUtils;
 import com.jdf.common.utils.JLog;
 
 import java.util.Arrays;
 
-public class Camera2Loader extends CameraLoader {
+//import com.jdf.camera.controller.DetectController;
+
+public class JCamera2Loader extends CameraLoader {
 
     private static final String TAG = "Camera2Loader";
 
@@ -45,17 +47,15 @@ public class Camera2Loader extends CameraLoader {
     private float mAspectRatio = 0.75f; // 4:3
     private Size mPreviewSize;
     private Integer mSensorOrientation;
-    private DetectController mDectControlleor;
-    public Camera2Loader(Activity activity) {
+    public JCamera2Loader(Activity activity) {
         mActivity = activity;
         mCameraManager = (CameraManager) mActivity.getSystemService(Context.CAMERA_SERVICE);
-        mDectControlleor = new DetectController(activity);
     }
 
     @Override
     public void onResume(int width, int height) {
-        mViewWidth = DetectController.DESIRED_PREVIEW_SIZE.getWidth();
-        mViewHeight = DetectController.DESIRED_PREVIEW_SIZE.getHeight();
+        mViewWidth = width;
+        mViewHeight = height;
         JLog.d("jiadongfeng1", "onResume with WxH[%d, %d]: " , mViewWidth , mViewHeight);
         setUpCamera();
     }
@@ -175,19 +175,14 @@ public class Camera2Loader extends CameraLoader {
             public void onImageAvailable(ImageReader reader) {
                 if (reader != null) {
                     Image image = reader.acquireNextImage();
-                    Log.d("jiadongfeng3","onImageAvailable: " + image.getWidth() + "x" + image.getHeight());
 
                     if (image != null) {
                         if (mOnPreviewFrameListener != null) {
                             byte[] data = ImageUtils.generateNV21Data(image);
                             mOnPreviewFrameListener.onPreviewFrame(data, image.getWidth(), image.getHeight());
                         }
-                        Log.d(TAG, "dector onImageAvailable..." );
 
-                        if(mDectControlleor!=null){
-                            mDectControlleor.onImageAvailable(image);
-                        }
-//                        image.close();
+                        image.close();
                     }
                 }
             }
@@ -239,19 +234,21 @@ public class Camera2Loader extends CameraLoader {
 
             Size[] sizes = map.getOutputSizes(ImageFormat.YUV_420_888);
             int orientation = getCameraOrientation();
+            Log.d("jiadongfeng1", "orientation: " + orientation);
 
             boolean swapRotation = orientation == 90 || orientation == 270;
-            swapRotation = true;
+
             int width = swapRotation ? mViewHeight : mViewWidth;
             int height = swapRotation ? mViewWidth : mViewHeight;
             mPreviewSize = getSuitableSize(sizes, width, height, mAspectRatio);
-            Log.d("jiadongfeng1", "orientation: " + orientation+" mViewWidth:"+mViewWidth+" mViewHeight:"+mViewHeight+" mPreviewSize");
+            Log.d("jiadongfeng1", "width: " + width+" height:"+height);
+
+            Log.d("jiadongfeng1", "orientation: " + orientation+" mViewWidth:"+mViewWidth+" mViewHeight:"+mViewHeight+" mPreviewSize:"+mPreviewSize);
 
         }
 
         JLog.d("jiadongfeng1", "get mPreviewSize[%s], mSensorOrientation[%d]",mPreviewSize,mSensorOrientation);
 
-        mDectControlleor.onPreviewSizeChosen(mPreviewSize, mSensorOrientation);
 
     }
 

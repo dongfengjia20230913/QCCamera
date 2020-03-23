@@ -13,28 +13,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppStartTheme1">
         <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity
-            android:name=".activity.CameraActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.GalleryActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.PicFilterBaseActivity"
-            android:screenOrientation="portrait" >
+            android:name=".activity.Camera2Activity"
+            android:label="@string/title_activity_camera2"
+            android:theme="@style/AppStartTheme1.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait" >
 
+        </activity>
+        <activity
+            android:name=".activity.GalleryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PicFilterBaseActivity"
+            android:screenOrientation="portrait">
 
+        </activity>
     </application>
 
 </manifest>

@@ -16,4 +16,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppStartTheme1.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppStartTheme1.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppStartTheme1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

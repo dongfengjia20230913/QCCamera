@@ -18,6 +18,7 @@ package com.jdf.gpufilter;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
@@ -30,6 +31,7 @@ import com.jdf.gpufilter.util.TextureRotationUtil;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -66,6 +68,9 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
 
 
     private GPUImage.ScaleType scaleType = GPUImage.ScaleType.CENTER_CROP;
+
+
+    private IntBuffer glRgbBuffer;
 
 
     //顶点坐标
@@ -254,11 +259,43 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
     }
 
 
+    public void onPreviewFrame(final byte[] data, final int width, final int height) {
+        if (glRgbBuffer == null) {
+            glRgbBuffer = IntBuffer.allocate(width * height);
+        }
+        if (runOnDraw.isEmpty()) {
+            runOnDraw(new Runnable() {
+                @Override
+                public void run() {
+                    GPUImageNativeLibrary.YUVtoRBGA(data, width, height, glRgbBuffer.array());
+                    glTextureId = OpenGlUtils.loadTexture(glRgbBuffer, width, height, glTextureId);
+
+                    if (imageWidth != width) {
+                        imageWidth = width;
+                        imageHeight = height;
+                        adjustImageScaling();
+                    }
+                }
+            });
+        }
+    }
 
     protected void runOnDraw(final Runnable runnable) {
         synchronized (runOnDraw) {
             runOnDraw.add(runnable);
         }
+    }
+
+    public void setRotation(final Rotation rotation,
+                            final boolean flipHorizontal, final boolean flipVertical) {
+        this.flipHorizontal = flipHorizontal;
+        this.flipVertical = flipVertical;
+        setRotation(rotation);
+    }
+
+    public void setRotation(final Rotation rotation) {
+        this.rotation = rotation;
+        adjustImageScaling();
     }
 
 
