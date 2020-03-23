@@ -121,9 +121,11 @@ public class GPUImageFilter {
         cubeBuffer.position(0);
         GLES20.glVertexAttribPointer(glAttribPosition, 2, GLES20.GL_FLOAT, false, 0, cubeBuffer);
         GLES20.glEnableVertexAttribArray(glAttribPosition);
+
         textureBuffer.position(0);
         GLES20.glVertexAttribPointer(glAttribTextureCoordinate, 2, GLES20.GL_FLOAT, false, 0,
                 textureBuffer);
+
         GLES20.glEnableVertexAttribArray(glAttribTextureCoordinate);
         if (textureId != OpenGlUtils.NO_TEXTURE) {
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);

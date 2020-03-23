@@ -19,13 +19,19 @@ package com.jdf.gpufilter.util;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.hardware.Camera.Size;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+import com.jdf.common.utils.JLog;
+
 import java.nio.IntBuffer;
 
+
 public class OpenGlUtils {
+    private static final String TAG = "OpenGlUtils";
     public static final int NO_TEXTURE = -1;
 
     public static int loadTexture(final Bitmap img, final int usedTexId) {
@@ -36,7 +42,9 @@ public class OpenGlUtils {
         int textures[] = new int[1];
         if (usedTexId == NO_TEXTURE) {
             GLES20.glGenTextures(1, textures, 0);
+            //将textures绑定到一个二维纹理对象上GL_TEXTURE_2D
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+            //对当前绑定的二维纹理对象进行设置
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                     GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
@@ -45,10 +53,11 @@ public class OpenGlUtils {
                     GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                     GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-
+            //将img与当前绑定的二维图像GL_TEXTURE_2D进项关联，后续我们可以通过textures操作该图像
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, img, 0);
         } else {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, usedTexId);
+            //如果上一次的纹理id没有被重置，则会将img绘制到上一纹理的上面
             GLUtils.texSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, img);
             textures[0] = usedTexId;
         }
@@ -138,4 +147,85 @@ public class OpenGlUtils {
         float fRandNum = (float) Math.random();
         return min + (max - min) * fRandNum;
     }
+
+    /**
+     * 创建OES 类型的Texture
+     *
+     * @return
+     */
+    public static int createOESTexture() {
+        return createTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+    }
+
+    /**
+     * 创建Texture对象
+     *
+     * @param textureType
+     * @return
+     */
+    public static int createTexture(int textureType) {
+        int[] textures = new int[1];
+        GLES30.glGenTextures(1, textures, 0);
+        checkGlError("glGenTextures");
+        int textureId = textures[0];
+        GLES30.glBindTexture(textureType, textureId);
+        checkGlError("glBindTexture " + textureId);
+        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
+        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+        checkGlError("glTexParameter");
+        return textureId;
+    }
+
+    /**
+     * 检查是否出错
+     *
+     * @param op
+     */
+    public static void checkGlError(String op) {
+        int error = GLES30.glGetError();
+        if (error != GLES30.GL_NO_ERROR) {
+            String msg = op + ": glError 0x" + Integer.toHexString(error);
+            JLog.e(TAG, "checkGlError[%s]",msg);
+        }
+    }
+
+    /**
+     * 创建Sampler2D的Framebuffer 和 Texture
+     *
+     * @param frameBuffer
+     * @param frameBufferTexture
+     * @param width
+     * @param height
+     */
+    public static void createFrameBuffer(int[] frameBuffer, int[] frameBufferTexture,
+                                         int width, int height) {
+        //产生FBO ID
+        GLES30.glGenFramebuffers(frameBuffer.length, frameBuffer, 0);
+        //产生纹理ID
+        GLES30.glGenTextures(frameBufferTexture.length, frameBufferTexture, 0);
+        for (int i = 0; i < frameBufferTexture.length; i++) {
+            //绑定纹理
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, frameBufferTexture[i]);
+            //加载图像数据, 并上传纹理
+            //pixels 可能是一个空指针。在这种情况下，会分配纹理内存以适应宽度width和高度的纹理height
+            GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGBA, width, height, 0, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, null);
+
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+            //绑定
+            GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, frameBuffer[i]);
+            //将texture和level指定的纹理图像附加为当前绑定的帧缓冲区对象的逻辑缓冲区之一
+            GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, frameBufferTexture[i], 0);
+            //解绑纹理
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);
+            //解绑FBO
+            GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+        }
+        checkGlError("createFrameBuffer");
+    }
+
 }

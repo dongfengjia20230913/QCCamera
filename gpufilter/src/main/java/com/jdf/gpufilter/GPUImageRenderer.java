@@ -42,16 +42,13 @@ import com.jdf.gpufilter.util.OpenGlUtils;
 import com.jdf.gpufilter.util.Rotation;
 import com.jdf.gpufilter.util.TextureRotationUtil;
 
+import static  com.jdf.gpufilter.util.TextureRotationUtil.CUBE;
+
 import static com.jdf.gpufilter.util.TextureRotationUtil.TEXTURE_NO_ROTATION;
 
 public class GPUImageRenderer implements GLSurfaceView.Renderer, GLTextureView.Renderer, PreviewCallback {
     private static final int NO_IMAGE = -1;
-    public static final float CUBE[] = {
-            -1.0f, -1.0f,
-            1.0f, -1.0f,
-            -1.0f, 1.0f,
-            1.0f, 1.0f,
-    };
+
 
     private GPUImageFilter filter;
 
