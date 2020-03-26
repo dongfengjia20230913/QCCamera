@@ -20,19 +20,20 @@ import com.jdf.gpufilter.util.Rotation;
 
 public class TextureRotationUtil {
 
+    //顶点坐标
     public static final float CUBE[] = {
-            -1.0f, -1.0f,
-            1.0f, -1.0f,
-            -1.0f, 1.0f,
-            1.0f, 1.0f,
+            -1.0f, -1.0f,//v0
+            1.0f, -1.0f,//v1
+            -1.0f, 1.0f,//v2
+            1.0f, 1.0f,//v3
     };
 
-
+    //纹理坐标
     public static final float TEXTURE_NO_ROTATION[] = {
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            0.0f, 0.0f,
-            1.0f, 0.0f,
+            0.0f, 1.0f,//t0
+            1.0f, 1.0f,//t1
+            0.0f, 0.0f,//t2
+            1.0f, 0.0f,//t3
     };
 
     public static final float TEXTURE_ROTATED_90[] = {

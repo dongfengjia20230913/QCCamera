@@ -82,14 +82,8 @@ public class GPUImageRenderer implements GLSurfaceView.Renderer, GLTextureView.R
         runOnDraw = new LinkedList<>();
         runOnDrawEnd = new LinkedList<>();
 
-        glCubeBuffer = ByteBuffer.allocateDirect(CUBE.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        glCubeBuffer.put(CUBE).position(0);
-
-        glTextureBuffer = ByteBuffer.allocateDirect(TEXTURE_NO_ROTATION.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
+        glCubeBuffer = OpenGlUtils.createBuffer(CUBE);
+        glTextureBuffer = OpenGlUtils.createBuffer(TextureRotationUtil.TEXTURE_NO_ROTATION);
         setRotation(Rotation.NORMAL, false, false);
     }
 

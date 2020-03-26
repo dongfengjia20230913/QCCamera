@@ -18,6 +18,8 @@ package com.jdf.gpufilter.fiters;
 
 import android.opengl.GLES20;
 
+import com.jdf.common.utils.JLog;
+
 /**
  * Applies a grayscale effect to the image.
  */
@@ -74,6 +76,7 @@ public class GPUImagePixelationFilter extends GPUImageFilter {
     }
 
     public void setPixel(final float pixel) {
+        JLog.d("Pix","set Pixel:"+pixel);
         this.pixel = pixel;
         setFloat(pixelLocation, this.pixel);
     }

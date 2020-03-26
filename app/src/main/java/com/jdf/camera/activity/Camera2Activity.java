@@ -8,13 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
 import com.jdf.camera.R;
-import com.jdf.camera.camera.CameraLoader;
-import com.jdf.camera.camera.JCamera2Loader;
-import com.jdf.common.utils.JLog;
-import com.jdf.gpufilter.GPUImageView;
+import com.jdf.camera.camera.loader.CameraLoader;
+import com.jdf.camera.camera.loader.JCamera2Loader;
 import com.jdf.gpufilter.JGPUImageRenderer;
-import com.jdf.gpufilter.fiters.GPUImageFilter;
-import com.jdf.gpufilter.fiters.JGPUImageFilter;
+import com.jdf.gpufilter.fiters.extend.JGPUImageFilter;
 import com.jdf.gpufilter.util.Rotation;
 
 public class Camera2Activity extends AppCompatActivity {
@@ -30,7 +27,6 @@ public class Camera2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_camera2);
         camera2Loader = new JCamera2Loader(this);
         glSurfaceView = findViewById(R.id.glsurfaceView);
-        JLog.d("jiadongfeng1", "glSurfaceView: "+glSurfaceView);
         render = new JGPUImageRenderer(new JGPUImageFilter());
         glSurfaceView.setEGLContextClientVersion(2);
         updateGPUImageRotate();

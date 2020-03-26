@@ -19,14 +19,15 @@ package com.jdf.gpufilter.fiters;
 import android.annotation.SuppressLint;
 import android.opengl.GLES20;
 
+import com.jdf.gpufilter.util.OpenGlUtils;
+import com.jdf.gpufilter.util.Rotation;
+import com.jdf.gpufilter.util.TextureRotationUtil;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jdf.gpufilter.util.Rotation;
-import com.jdf.gpufilter.util.TextureRotationUtil;
 
 import static com.jdf.gpufilter.util.TextureRotationUtil.CUBE;
 import static com.jdf.gpufilter.util.TextureRotationUtil.TEXTURE_NO_ROTATION;
@@ -150,41 +151,11 @@ public class GPUImageFilterGroup extends GPUImageFilter {
             frameBuffers = new int[size - 1];
             frameBufferTextures = new int[size - 1];
 
-            for (int i = 0; i < size - 1; i++) {
-                //产生FBO ID
-                GLES20.glGenFramebuffers(1, frameBuffers, i);
-                //产生纹理ID
-                GLES20.glGenTextures(1, frameBufferTextures, i);
-                //绑定纹理
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, frameBufferTextures[i]);
-                //加载图像数据, 并上传纹理
-                //pixels 可能是一个空指针。在这种情况下，会分配纹理内存以适应宽度width和高度的纹理height
-                GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0,
-                        GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
-
-
-                GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                        GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-                GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                        GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-                GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                        GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-                GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-                        GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-
-                //绑定 Fbo id
-                GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffers[i]);
-                //将texture和level指定的纹理图像附加为当前绑定的帧缓冲区对象的逻辑缓冲区之一
-
-                GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
-                        GLES20.GL_TEXTURE_2D, frameBufferTextures[i], 0);
-               //解绑纹理
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-                //解绑FBO
-                GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-            }
+            OpenGlUtils.createFrameBuffer(frameBuffers,frameBufferTextures, width, height);
         }
     }
+
+
 
     /*
      * (non-Javadoc)

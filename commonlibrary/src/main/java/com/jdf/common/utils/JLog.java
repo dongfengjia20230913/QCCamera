@@ -24,7 +24,7 @@ public class JLog  extends BaseLog{
     }
 
     public static void i(String tag, String msg, Object... args) {
-        logReally(Log.INFO, tag, msg,args);
+        logReally(Log.INFO, tag, msg, args);
     }
 
 

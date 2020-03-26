@@ -21,12 +21,15 @@ import android.graphics.Bitmap.Config;
 import android.hardware.Camera.Size;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
-import android.opengl.GLES30;
+import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.jdf.common.utils.JLog;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 
@@ -117,12 +120,12 @@ public class OpenGlUtils {
         int[] link = new int[1];
         iVShader = loadShader(strVSource, GLES20.GL_VERTEX_SHADER);
         if (iVShader == 0) {
-            Log.d("Load Program", "Vertex Shader Failed");
+            JLog.d("Load Program", "Vertex Shader Failed");
             return 0;
         }
         iFShader = loadShader(strFSource, GLES20.GL_FRAGMENT_SHADER);
         if (iFShader == 0) {
-            Log.d("Load Program", "Fragment Shader Failed");
+            JLog.d("Load Program", "Fragment Shader Failed");
             return 0;
         }
 
@@ -135,7 +138,7 @@ public class OpenGlUtils {
 
         GLES20.glGetProgramiv(iProgId, GLES20.GL_LINK_STATUS, link, 0);
         if (link[0] <= 0) {
-            Log.d("Load Program", "Linking Failed");
+            JLog.d("Load Program", "Linking Failed");
             return 0;
         }
         GLES20.glDeleteShader(iVShader);
@@ -165,16 +168,17 @@ public class OpenGlUtils {
      */
     public static int createTexture(int textureType) {
         int[] textures = new int[1];
-        GLES30.glGenTextures(1, textures, 0);
+        GLES20.glGenTextures(1, textures, 0);
         checkGlError("glGenTextures");
         int textureId = textures[0];
-        GLES30.glBindTexture(textureType, textureId);
+        GLES20.glBindTexture(textureType, textureId);
         checkGlError("glBindTexture " + textureId);
-        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
-        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
-        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
-        GLES30.glTexParameterf(textureType, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         checkGlError("glTexParameter");
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
         return textureId;
     }
 
@@ -184,48 +188,65 @@ public class OpenGlUtils {
      * @param op
      */
     public static void checkGlError(String op) {
-        int error = GLES30.glGetError();
-        if (error != GLES30.GL_NO_ERROR) {
+        int error = GLES20.glGetError();
+        if (error != GLES20.GL_NO_ERROR) {
             String msg = op + ": glError 0x" + Integer.toHexString(error);
             JLog.e(TAG, "checkGlError[%s]",msg);
         }
     }
 
-    /**
-     * 创建Sampler2D的Framebuffer 和 Texture
-     *
-     * @param frameBuffer
-     * @param frameBufferTexture
-     * @param width
-     * @param height
-     */
+
     public static void createFrameBuffer(int[] frameBuffer, int[] frameBufferTexture,
                                          int width, int height) {
         //产生FBO ID
-        GLES30.glGenFramebuffers(frameBuffer.length, frameBuffer, 0);
+        GLES20.glGenFramebuffers(frameBuffer.length, frameBuffer, 0);
         //产生纹理ID
-        GLES30.glGenTextures(frameBufferTexture.length, frameBufferTexture, 0);
+        GLES20.glGenTextures(frameBufferTexture.length, frameBufferTexture, 0);
         for (int i = 0; i < frameBufferTexture.length; i++) {
             //绑定纹理
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, frameBufferTexture[i]);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, frameBufferTexture[i]);
             //加载图像数据, 并上传纹理
             //pixels 可能是一个空指针。在这种情况下，会分配纹理内存以适应宽度width和高度的纹理height
-            GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGBA, width, height, 0, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, null);
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
 
-            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
-            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR);
-            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
-            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
             //绑定
-            GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, frameBuffer[i]);
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer[i]);
             //将texture和level指定的纹理图像附加为当前绑定的帧缓冲区对象的逻辑缓冲区之一
-            GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D, frameBufferTexture[i], 0);
+            GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, frameBufferTexture[i], 0);
             //解绑纹理
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
             //解绑FBO
-            GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         }
         checkGlError("createFrameBuffer");
     }
 
+
+    public static  FloatBuffer createBuffer(float[] vertexData) {
+        FloatBuffer buffer = ByteBuffer.allocateDirect(vertexData.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        buffer.put(vertexData).position(0);
+        return buffer;
+    }
+
+    public static int createOESTextureObject() {
+        int[] tex = new int[1];
+        GLES20.glGenTextures(1, tex, 0);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, tex[0]);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
+        return tex[0];
+    }
 }

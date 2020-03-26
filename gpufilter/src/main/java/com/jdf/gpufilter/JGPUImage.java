@@ -23,9 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 
-import com.jdf.gpufilter.fiters.GPUImageFilter;
-import com.jdf.gpufilter.fiters.JGPUImageFilter;
-import com.jdf.gpufilter.fiters.JGPUImageGrayFilter;
+import com.jdf.gpufilter.fiters.extend.JGPUImageFilter;
 
 public class JGPUImage {
 

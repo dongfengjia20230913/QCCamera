@@ -3,7 +3,13 @@
 
     <!-- MainActivity-->
     <string name="main_camera">Camera</string>
+    <string name="oes_fbo">OES FBO</string>
+
     <string name="main_gallery">Gallery</string>
+
+    <string name="picture_show">Picture Show</string>
+
+
     <string name="main_permission_hint">Please Open Permission</string>
 
     <!-- Common-->

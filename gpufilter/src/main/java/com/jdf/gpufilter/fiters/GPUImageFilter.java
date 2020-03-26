@@ -52,8 +52,10 @@ public class GPUImageFilter {
             "}";
 
     private final LinkedList<Runnable> runOnDraw;
+
     private final String vertexShader;
     private final String fragmentShader;
+
     private int glProgId;
     private int glAttribPosition;
     private int glUniformTexture;
@@ -125,10 +127,11 @@ public class GPUImageFilter {
         textureBuffer.position(0);
         GLES20.glVertexAttribPointer(glAttribTextureCoordinate, 2, GLES20.GL_FLOAT, false, 0,
                 textureBuffer);
-
         GLES20.glEnableVertexAttribArray(glAttribTextureCoordinate);
+
         if (textureId != OpenGlUtils.NO_TEXTURE) {
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+            //绑定纹理，OpenGL下面代码中对2D纹理的任何设置都是针对索引为textureId的纹理的
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
             GLES20.glUniform1i(glUniformTexture, 0);
         }
@@ -136,6 +139,7 @@ public class GPUImageFilter {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         GLES20.glDisableVertexAttribArray(glAttribPosition);
         GLES20.glDisableVertexAttribArray(glAttribTextureCoordinate);
+        //解绑纹理
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         JLog.d("jiadongfeng4",this+" start end....");
 

@@ -5,6 +5,8 @@
     <string name="main_camera">相机</string>
     <string name="main_gallery">相册</string>
     <string name="main_permission_hint">请打开相关权限</string>
+    <string name="oes_fbo">OES类型FBO</string>
+    <string name="picture_show">opengl 图片和滤镜切换</string>
 
     <!-- Common-->
     <string name="choose_filter">选择滤镜1</string>

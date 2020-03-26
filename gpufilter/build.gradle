@@ -9,7 +9,7 @@ android {
 
         versionCode = VERSION_CODE as int
         versionName = VERSION_NAME
-        ndk.abiFilters 'armeabi-v7a'
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
         externalNativeBuild {
             cmake { cppFlags "" }
         }
@@ -30,20 +30,16 @@ android {
 }
 
 ext {
-
-    bintrayName = 'gpufiler'
+    bintrayRepo = 'maven'
+    bintrayName = 'gpuimage'
     bintrayUserOrg = 'jdf'
-    publishedGroupId = 'com.jdf.gpufiter'
-    libraryName = 'gpufiler'
-    artifact = 'gpufiler'
-    libraryDescription = 'Image filters for Android with OpenGL (based on GPUImage for iOS)'
-    siteUrl = 'https://github.com/jdf-eng/QCCamera'
-    gitUrl = 'https://github.com/jdf-eng/QCCamera.git'
-    issueUrl = 'https://github.com/jdf-eng/QCCamera/issues'
+    publishedGroupId = 'jdf.gpu.android'
+    libraryName = 'gpuimage'
+    artifact = 'gpuimage'
+    libraryDescription = 'Image filters for Android with OpenGL'
     libraryVersion = VERSION_NAME
-    developerId = 'cats'
-    developerName = 'CATS'
-    developerEmail = '987293233@qq.com'
+    developerId = 'jdf'
+    developerName = 'jdf'
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]

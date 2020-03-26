@@ -18,12 +18,10 @@ package com.jdf.gpufilter;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.jdf.common.utils.JLog;
-import com.jdf.gpufilter.fiters.JGPUImageFilter;
+import com.jdf.gpufilter.fiters.extend.JGPUImageFilter;
 import com.jdf.gpufilter.util.OpenGlUtils;
 import com.jdf.gpufilter.util.Rotation;
 import com.jdf.gpufilter.util.TextureRotationUtil;
@@ -38,61 +36,34 @@ import java.util.Queue;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.jdf.gpufilter.util.TextureRotationUtil.CUBE;
+import static com.jdf.gpufilter.util.TextureRotationUtil.TEXTURE_NO_ROTATION;
+
+
 public class JGPUImageRenderer implements GLSurfaceView.Renderer {
-    private static final String TAG = "GPUImageRenderer";
-    private static final int NO_IMAGE = -1;
+    protected static final String TAG = "GPUImageRenderer";
+    protected static final int NO_IMAGE = -1;
+    protected int glTextureId = NO_IMAGE;
+    protected final FloatBuffer glCubeBuffer;
+    protected final FloatBuffer glTextureBuffer;
+    protected int outputWidth;
+    protected int outputHeight;
+    protected Rotation rotation = Rotation.NORMAL;
+    protected boolean flipHorizontal;
+    protected boolean flipVertical;
+    protected final Queue<Runnable> runOnDraw;
+    protected final Queue<Runnable> runOnDrawEnd;
+    protected int imageWidth;
+    protected int imageHeight;
+    protected int addedPadding;
+    protected JGPUImageFilter filter;
+    protected GPUImage.ScaleType scaleType = GPUImage.ScaleType.CENTER_CROP;
+    protected IntBuffer glRgbBuffer;
 
-    private int glTextureId = NO_IMAGE;
-
-
-    private final FloatBuffer glCubeBuffer;
-    private final FloatBuffer glTextureBuffer;
-
-    private int outputWidth;
-    private int outputHeight;
-
-    private Rotation rotation = Rotation.NORMAL;
-    private boolean flipHorizontal;
-    private boolean flipVertical;
-
-
-    private final Queue<Runnable> runOnDraw;
-    private final Queue<Runnable> runOnDrawEnd;
-
-    private int imageWidth;
-    private int imageHeight;
-
-    private int addedPadding;
-
-    private JGPUImageFilter filter;
-
-
-    private GPUImage.ScaleType scaleType = GPUImage.ScaleType.CENTER_CROP;
-
-
-    private IntBuffer glRgbBuffer;
-
-
-    //顶点坐标
-    public static final float CUBE[] = {
-            -1.0f, -1.0f,//v0
-            1.0f, -1.0f,//v1
-            -1.0f, 1.0f,//v2
-            1.0f, 1.0f,//v3
-    };
-    //纹理坐标
-    public static final float TEXTURE_NO_ROTATION[] = {
-            0.0f, 1.0f,//t0
-            1.0f, 1.0f,//t1
-            0.0f, 0.0f,//t2
-            1.0f, 0.0f,//t3
-    };
-
-    public JGPUImageRenderer(final JGPUImageFilter filter) {
+    public  JGPUImageRenderer(final JGPUImageFilter filter) {
         this.filter = filter;
         runOnDraw = new LinkedList<>();
         runOnDrawEnd = new LinkedList<>();
-
         //为顶点坐标添加分配buffer对象
         glCubeBuffer = ByteBuffer.allocateDirect(CUBE.length * 4)
                 .order(ByteOrder.nativeOrder())
@@ -102,9 +73,8 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
         glTextureBuffer = ByteBuffer.allocateDirect(TEXTURE_NO_ROTATION.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
+        glTextureBuffer.put(TEXTURE_NO_ROTATION).position(0);
     }
-
-
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -132,14 +102,13 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(final GL10 gl) {
-        JLog.d("jiadongfeng4","onDraw.....");
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //调用队列任务
         runAll(runOnDraw);
         filter.onDraw(glTextureId, glCubeBuffer, glTextureBuffer);
     }
 
-    private void runAll(Queue<Runnable> queue) {
+    protected void runAll(Queue<Runnable> queue) {
         synchronized (queue) {
             while (!queue.isEmpty()) {
                 queue.poll().run();
@@ -147,7 +116,7 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    private void adjustImageScaling() {
+    protected void adjustImageScaling() {
         //返回的surface大小，也就是glsurfaceview的大小
         float outputWidth = this.outputWidth;
         float outputHeight = this.outputHeight;
@@ -199,7 +168,7 @@ public class JGPUImageRenderer implements GLSurfaceView.Renderer {
         glTextureBuffer.put(textureCords).position(0);
     }
 
-    private float addDistance(float coordinate, float distance) {
+    protected float addDistance(float coordinate, float distance) {
         return coordinate == 0.0f ? distance : 1 - distance;
     }
 

@@ -20,7 +20,14 @@
         </activity>
 
         <activity
-            android:name=".activity.Camera2OESActivity"
+            android:name=".activity.JCamera2OESFboActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+
+        <activity
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,11 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.CameraActivity"
             android:screenOrientation="portrait" >
@@ -43,6 +45,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PicFilterBaseActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
+            android:name=".activity.MoreActivity"
             android:screenOrientation="portrait">
 
         </activity>

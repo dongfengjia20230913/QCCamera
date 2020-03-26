@@ -1,19 +1,13 @@
 package com.jdf.camera.activity;
 
 import android.graphics.BitmapFactory;
-import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
 
 import com.jdf.camera.R;
 import com.jdf.gpufilter.GPUImage;
-import com.jdf.gpufilter.JGPUImage;
-import com.jdf.gpufilter.JGPUImageRenderer;
-import com.jdf.gpufilter.fiters.GPUImage3x3ConvolutionFilter;
 import com.jdf.gpufilter.fiters.GPUImageGrayscaleFilter;
-import com.jdf.gpufilter.fiters.JGPUImageFilter;
-import com.jdf.gpufilter.fiters.JGPUImageGrayFilter;
 
 
 public class PicFilterBaseActivity extends BaseActivity{

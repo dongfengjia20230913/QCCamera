@@ -1,16 +1,11 @@
 package com.jdf.camera.util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.opengl.Matrix;
-import android.view.View;
 
-import com.jdf.camera.Filter.GPUMultiImageAddBlendFilter;
-import com.jdf.camera.Filter.JGPUImageAddBlendFilter;
 import com.jdf.camera.R;
 import com.jdf.camera.ui.RecycleViewDialog;
 import com.jdf.common.widget.recycleview.FilterList;
@@ -91,12 +86,10 @@ import com.jdf.gpufilter.fiters.GPUImageTwoInputFilter;
 import com.jdf.gpufilter.fiters.GPUImageVignetteFilter;
 import com.jdf.gpufilter.fiters.GPUImageWeakPixelInclusionFilter;
 import com.jdf.gpufilter.fiters.GPUImageWhiteBalanceFilter;
-import com.qiku.android.app.QKAlertDialog;
+import com.jdf.gpufilter.fiters.extend.JImageAddBlendFilter;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.jdf.common.widget.recycleview.FilterType.*;
 
 public class GPUImageFilterTools {
     public static void showDialog(final Activity context,
@@ -189,7 +182,7 @@ public class GPUImageFilterTools {
     }
 
     public static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
-//        return createBlendFilter1(context, GPUMultiImageAddBlendFilter.class);
+//        return createBlendFilter1(context, JMultiImageAddBlendFilter.class);
 
         switch (type) {
             case CONTRAST:
@@ -384,16 +377,16 @@ public class GPUImageFilterTools {
     }
 
 
-    private static GPUImageFilter createBlendFilter1(Context context, Class<? extends GPUMultiImageAddBlendFilter> filterClass) {
+    private static GPUImageFilter createBlendFilter1(Context context, Class<? extends JImageAddBlendFilter> filterClass) {
         try {
-//            GPUMultiImageAddBlendFilter filter = new GPUMultiImageAddBlendFilter(context);
+//            JMultiImageAddBlendFilter filter = new JMultiImageAddBlendFilter(context);
 //
 //            filter.setOverlayTexture(BitmapFactory.decodeResource(context.getResources(), R.drawable.overlay));
 //            filter.setBlowoutTexture(BitmapFactory.decodeResource(context.getResources(), R.drawable.blowout));
 //            filter.setMapTexture(BitmapFactory.decodeResource(context.getResources(), R.drawable.map));
 
 
-            JGPUImageAddBlendFilter filter =new JGPUImageAddBlendFilter();
+            JImageAddBlendFilter filter =new JImageAddBlendFilter();
             filter.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.teximg));
 
             return filter;

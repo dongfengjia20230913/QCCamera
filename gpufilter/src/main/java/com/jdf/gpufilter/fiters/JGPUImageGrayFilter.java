@@ -16,7 +16,9 @@
 
 package com.jdf.gpufilter.fiters;
 
-public class JGPUImageGrayFilter extends  JGPUImageFilter {
+import com.jdf.gpufilter.fiters.extend.JGPUImageFilter;
+
+public class JGPUImageGrayFilter extends JGPUImageFilter {
     private static final String NO_FILTER_FRAGMENT_SHADER =
                       "precision mediump float;\n"
                     + "uniform sampler2D inputImageTexture;\n"

@@ -13,8 +13,8 @@ import androidx.core.view.ViewCompat;
 
 import com.afei.gpuimagedemo.util.FileUtils;
 import com.jdf.camera.R;
-import com.jdf.camera.camera.Camera2Loader;
-import com.jdf.camera.camera.CameraLoader;
+import com.jdf.camera.camera.loader.Camera2Loader;
+import com.jdf.camera.camera.loader.CameraLoader;
 import com.jdf.camera.controller.DetectController;
 import com.jdf.camera.util.ApplicationUtil;
 import com.jdf.camera.util.GPUImageFilterTools;
