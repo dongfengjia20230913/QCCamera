@@ -54,6 +54,11 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name="org.tensorflow.lite.examples.detection.DetectorActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

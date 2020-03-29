@@ -8,6 +8,7 @@
     <string name="main_gallery">Gallery</string>
 
     <string name="picture_show">Picture Show</string>
+    <string name="object_dect">Object detection</string>
 
 
     <string name="main_permission_hint">Please Open Permission</string>

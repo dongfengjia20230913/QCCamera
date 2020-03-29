@@ -17,26 +17,31 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="20dp"
-            android:layout_weight="6"
             android:drawableTop="@mipmap/ic_camera"
-            android:padding="30dp"
             android:text="@string/oes_fbo"
+            android:layout_weight="6"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/main_gallery_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="6"
+            android:layout_margin="20dp"
             android:drawableTop="@mipmap/ic_gallery"
-            android:padding="30dp"
             android:text="@string/picture_show"
+            android:layout_weight="6"
             android:textSize="18sp" />
 
 
+        <Button
+            android:id="@+id/tf_object"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:drawableTop="@mipmap/ic_camera"
+            android:text="@string/object_dect"
+            android:layout_weight="6"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

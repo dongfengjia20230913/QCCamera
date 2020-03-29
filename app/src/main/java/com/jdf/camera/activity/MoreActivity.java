@@ -6,6 +6,8 @@ import android.view.View;
 
 import com.jdf.camera.R;
 
+import org.tensorflow.lite.examples.detection.DetectorActivity;
+
 public class MoreActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
@@ -18,6 +20,7 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener{
     private void initView() {
         findViewById(R.id.main_camera_btn).setOnClickListener(this);
         findViewById(R.id.main_gallery_btn).setOnClickListener(this);
+        findViewById(R.id.tf_object).setOnClickListener(this);
     }
 
 
@@ -31,7 +34,9 @@ public class MoreActivity extends BaseActivity implements View.OnClickListener{
             case R.id.main_gallery_btn:
                 startActivity(new Intent(this, PicFilterBaseActivity.class));
                 break;
-            case R.id.more:
+            case R.id.tf_object:
+                startActivity(new Intent(this, DetectorActivity.class));
+
                 break;
         }
     }

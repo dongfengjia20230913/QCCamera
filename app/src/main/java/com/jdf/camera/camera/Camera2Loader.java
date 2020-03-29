@@ -20,9 +20,10 @@ import android.view.Surface;
 import androidx.annotation.NonNull;
 
 //import com.jdf.camera.controller.DetectController;
-import com.jdf.camera.controller.DetectController;
 import com.jdf.camera.util.ImageUtils;
 import com.jdf.common.utils.JLog;
+
+import org.tensorflow.lite.examples.detection.DetectionController;
 
 import java.util.Arrays;
 
@@ -45,17 +46,15 @@ public class Camera2Loader extends CameraLoader {
     private float mAspectRatio = 0.75f; // 4:3
     private Size mPreviewSize;
     private Integer mSensorOrientation;
-    private DetectController mDectControlleor;
     public Camera2Loader(Activity activity) {
         mActivity = activity;
         mCameraManager = (CameraManager) mActivity.getSystemService(Context.CAMERA_SERVICE);
-        mDectControlleor = new DetectController(activity);
     }
 
     @Override
     public void onResume(int width, int height) {
-        mViewWidth = DetectController.DESIRED_PREVIEW_SIZE.getWidth();
-        mViewHeight = DetectController.DESIRED_PREVIEW_SIZE.getHeight();
+        mViewWidth = width;
+        mViewHeight = height;
         JLog.d("jiadongfeng1", "onResume with WxH[%d, %d]: " , mViewWidth , mViewHeight);
         setUpCamera();
     }
@@ -184,10 +183,7 @@ public class Camera2Loader extends CameraLoader {
                         }
                         Log.d(TAG, "dector onImageAvailable..." );
 
-                        if(mDectControlleor!=null){
-                            mDectControlleor.onImageAvailable(image);
-                        }
-//                        image.close();
+                        image.close();
                     }
                 }
             }
@@ -251,7 +247,6 @@ public class Camera2Loader extends CameraLoader {
 
         JLog.d("jiadongfeng1", "get mPreviewSize[%s], mSensorOrientation[%d]",mPreviewSize,mSensorOrientation);
 
-        mDectControlleor.onPreviewSizeChosen(mPreviewSize, mSensorOrientation);
 
     }
 

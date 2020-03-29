@@ -13,14 +13,12 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 
 import androidx.annotation.NonNull;
 
-import com.jdf.camera.controller.DetectController;
 import com.jdf.camera.util.ImageUtils;
 import com.jdf.common.utils.JLog;
 

@@ -21,8 +21,6 @@ import android.view.Surface;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.jdf.camera.controller.DetectController;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
